@@ -69,4 +69,3 @@ class RedirectorService
 		url =~ URI::regexp ? true : false
 	end
 end
-
