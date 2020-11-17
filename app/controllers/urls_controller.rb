@@ -4,26 +4,32 @@ class UrlsController < ApplicationController
 	end
 
 	def create
-		render json: @service.create(params[:short_url])
+		result = service.create(params[:url])
+
+		if result[:errors] 
+			render json: { status: 'error', message: result[:errors] }
+		else
+			render json: { status: 'ok', short_url: result[:short_url] }
+		end
 	end
 
 	def redirect
-		url, error = @service.redirect(params[:short_url])
+		result = service.redirect(params[:short_url])
 
-		if error 
-			render json: { status: 'error', message: error }
+		if result[:errors]
+			render json: { status: 'error', message: result[:errors] }
 		else
-			redirect_to url 
+			redirect_to result[:url] 
 		end
 	end
 
 	def stats
-		counter, error = @service.stats(params[:short_url])
+		result = service.stats(params[:short_url])
 
-		if error 
-			render json: { status: 'error', message: error }
+		if result[:errors] 
+			render json: { status: 'error', message: result[:errors] }
 		else
-			render json: { staus: 'ok', counter: counter }
+			render json: { staus: 'ok', counter: result[:counter] }
 		end
 	end
 
