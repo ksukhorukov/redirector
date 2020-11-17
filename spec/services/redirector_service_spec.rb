@@ -36,4 +36,9 @@ RSpec.describe RedirectorService do
 		errors = RedirectorService.new({ short_url: "non-existing-short-url" }).redirect
 		expect(errors).to match({ errors: 'Record not found' })	
 	end
+
+	it "fails to provide the stats for non-existing short url" do 
+		errors = RedirectorService.new({ short_url: "non-existing-short-url" }).stats
+		expect(errors).to match({ errors: 'Record not found' })	
+	end
 end
