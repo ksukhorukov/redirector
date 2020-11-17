@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe RedirectorService do
-	it "successfully generate salt for the uri" do 
+	it "successfully generates salt for the uri" do 
 		service = RedirectorService.new({ url: "http://www.google.com" })
 		salt = service.send(:generate_salt)
 		expect(salt).to match(/[a-z0-9]{10}/i)
 	end
 
-	it "successfully generate short url for the uri" do 
+	it "successfully generates short url for the uri" do 
 		service = RedirectorService.new({ url: "http://www.google.com" })
 		result = service.create
 		short_url = service.create[:short_url]
@@ -18,5 +18,12 @@ RSpec.describe RedirectorService do
 		short_url = RedirectorService.new({ url: "http://www.google.com" }).create[:short_url]
 		url = RedirectorService.new({short_url: short_url}).redirect[:url]
 		expect(url).to match("http://www.google.com")
+	end
+
+	it "returns correct stats" do 
+		short_url = RedirectorService.new({ url: "http://www.google.com" }).create[:short_url]
+		url = RedirectorService.new({short_url: short_url}).redirect[:url]
+		counter = RedirectorService.new({short_url: short_url}).stats[:counter]
+		expect(counter).to match(1)
 	end
 end
