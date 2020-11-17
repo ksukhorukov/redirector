@@ -28,7 +28,12 @@ RSpec.describe RedirectorService do
 	end
 
 	it "fails to create short url when bad uri provided" do 
-		error = RedirectorService.new({ url: "bad uri" }).create
-		expect(error).to match({ errors: 'Incorrect URL' })	
+		errors = RedirectorService.new({ url: "bad uri" }).create
+		expect(errors).to match({ errors: 'Incorrect URL' })	
+	end
+
+	it "fails to redirect when non-existing short url provided" do 
+		errors = RedirectorService.new({ short_url: "non-existing-short-url" }).redirect
+		expect(errors).to match({ errors: 'Record not found' })	
 	end
 end
