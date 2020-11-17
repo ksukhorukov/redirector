@@ -7,9 +7,9 @@ class UrlsController < ApplicationController
 		result = service.create
 
 		if result[:errors] 
-			render json: { status: 'error', message: result[:errors] }
+			render json: { status: 'error', message: result[:errors] }, status: :unprocessable_entity
 		else
-			render json: { status: 'ok', short_url: result[:short_url] }
+			render json: { status: 'ok', short_url: result[:short_url] }, status: :created
 		end
 	end
 
@@ -17,7 +17,7 @@ class UrlsController < ApplicationController
 		result = service.redirect
 
 		if result[:errors]
-			render json: { status: 'error', message: result[:errors] }
+			render json: { status: 'error', message: result[:errors] }, status: :unprocessable_entity
 		else
 			redirect_to result[:url] 
 		end
@@ -27,9 +27,9 @@ class UrlsController < ApplicationController
 		result = service.stats
 
 		if result[:errors] 
-			render json: { status: 'error', message: result[:errors] }
+			render json: { status: 'error', message: result[:errors] }, status: :unprocessable_entity
 		else
-			render json: { staus: 'ok', counter: result[:counter] }
+			render json: { staus: 'ok', counter: result[:counter] }, status: :ok
 		end
 	end
 
