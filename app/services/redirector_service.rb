@@ -8,7 +8,7 @@ class RedirectorService
 	def create(url)
 		record = Url.create(url: url, short_url: generate_short_url(url)) 
 
-		if record.errors?
+		unless record.errors.empty?
 			{ errors: record.errors.messages }
 		else
 			{ short_url: record.short_url }
@@ -21,7 +21,7 @@ class RedirectorService
 		if record 
 			record.counter += 1
 			record.save
-			
+
 			{ url: record.url }
 		else
 			{ errors: RECORD_NOT_FOUND_ERROR }
