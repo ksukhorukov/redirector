@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe 'Urls', type: :request do
@@ -19,8 +21,8 @@ RSpec.describe 'Urls', type: :request do
     end
   end
 
-  describe 'GET /urls/:short_url' do 
-    it 'transforms correct short url to original url and redirects' do 
+  describe 'GET /urls/:short_url' do
+    it 'transforms correct short url to original url and redirects' do
       post urls_path, params: {
         url: 'http://www.google.com'
       }
@@ -32,15 +34,15 @@ RSpec.describe 'Urls', type: :request do
       expect(response).to have_http_status(302)
     end
 
-    it 'fails to redirect when incorrect short url provided' do 
-      get "/urls/non-existing-short-url"
+    it 'fails to redirect when incorrect short url provided' do
+      get '/urls/non-existing-short-url'
 
       expect(response).to have_http_status(422)
     end
   end
 
-  describe 'GET /urls/:short_url/stats' do 
-    it 'responds with correct statistic when correct short url provided' do 
+  describe 'GET /urls/:short_url/stats' do
+    it 'responds with correct statistic when correct short url provided' do
       post urls_path, params: {
         url: 'http://www.google.com'
       }
@@ -55,8 +57,8 @@ RSpec.describe 'Urls', type: :request do
       expect(JSON.parse(response.body)['counter']).to eq(1)
     end
 
-    it 'responds with error when incorrect short url provided' do 
-      get "/urls/incorrect-short-url/stats"
+    it 'responds with error when incorrect short url provided' do
+      get '/urls/incorrect-short-url/stats'
 
       expect(response).to have_http_status(422)
     end
