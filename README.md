@@ -1,25 +1,35 @@
-# README
+# Redirector
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+URLs minifying service
 
-Things you may want to cover:
+### Requirements
 
-* Ruby version
+`Ruby 2.7`
 
-* System dependencies
+### Installation
 
-* Configuration
+```
+$ cd redirector
+$ bundle install
+$ rails s
+```
 
-* Database creation
+### Usage
 
-* Database initialization
+Create minified link:
 
-* How to run the test suite
+```
+curl -d url=http://www.google.com http://localhost:3000/urls
 
-* Services (job queues, cache servers, search engines, etc.)
+{"status":"ok","short_url":"afc4b"}
+```
 
-* Deployment instructions
+To visit minified link open ```http://localhost:3000/urls/afc4b``` in your browser
 
-* ...
-"# Redirector" 
+To see the stats of minified link open ```http://localhost:3000/urls/afc4b/stats``` in your browser:
+
+```
+{"staus":"ok","counter":1}
+```
+
+# EOF
