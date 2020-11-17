@@ -4,7 +4,7 @@ class UrlsController < ApplicationController
 	end
 
 	def create
-		result = service.create(params[:url])
+		result = service.create
 
 		if result[:errors] 
 			render json: { status: 'error', message: result[:errors] }
@@ -14,7 +14,7 @@ class UrlsController < ApplicationController
 	end
 
 	def redirect
-		result = service.redirect(params[:short_url])
+		result = service.redirect
 
 		if result[:errors]
 			render json: { status: 'error', message: result[:errors] }
@@ -24,7 +24,7 @@ class UrlsController < ApplicationController
 	end
 
 	def stats
-		result = service.stats(params[:short_url])
+		result = service.stats
 
 		if result[:errors] 
 			render json: { status: 'error', message: result[:errors] }
@@ -36,6 +36,6 @@ class UrlsController < ApplicationController
 	private
 
 	def service
-		@service ||= RedirectorService.new
+		@service ||= RedirectorService.new(params)
 	end
 end

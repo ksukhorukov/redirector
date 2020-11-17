@@ -1,12 +1,20 @@
 require 'securerandom'
 require 'digest'
-
+require 'uri'
 
 class RedirectorService
+	attr_accessor :url, :short_url
+
 	RECORD_NOT_FOUND_ERROR = 'Record not found'
 
-	def create(url)
-		record = Url.create(url: url, short_url: generate_short_url(url)) 
+	def initialize(params)
+		@url, @short_url = params[:url], params[:short_url]
+	end
+
+	def create
+    return { errors: 'Incorrect URL' } unless correct_url?
+		
+		record = Url.create(url: url, short_url: generate_short_url) 
 
 		unless record.errors.empty?
 			{ errors: record.errors.messages }
@@ -15,7 +23,7 @@ class RedirectorService
 		end
 	end
 
-	def redirect(short_url)
+	def redirect
 		record = Url.where(short_url: short_url).first
 
 		if record 
@@ -28,7 +36,7 @@ class RedirectorService
 		end
 	end
 
-	def stats(short_url)
+	def stats
 		record = Url.where(short_url: short_url).first
 
 		if record 
@@ -40,11 +48,11 @@ class RedirectorService
 
 	private
 
-	def generate_short_url(url)
+	def generate_short_url
 		digest = Digest::MD5.hexdigest(url + generate_salt)
 		short_url = digest[0, 5]
 
-		return generate_short_url(url) if short_url_exist?(short_url)
+		return generate_short_url if short_url_exist?
 			
 		short_url
 	end
@@ -53,8 +61,12 @@ class RedirectorService
 		SecureRandom.alphanumeric(10)
 	end
 
-	def short_url_exist?(short_url)
+	def short_url_exist?
 		Url.where(short_url: short_url).first
+	end
+
+	def correct_url?
+		url =~ URI::regexp ? true : false
 	end
 end
 
