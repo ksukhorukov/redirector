@@ -26,4 +26,9 @@ RSpec.describe RedirectorService do
 		counter = RedirectorService.new({short_url: short_url}).stats[:counter]
 		expect(counter).to match(1)
 	end
+
+	it "fails to create short url when bad uri provided" do 
+		error = RedirectorService.new({ url: "bad uri" }).create
+		expect(error).to match({ errors: 'Incorrect URL' })	
+	end
 end
