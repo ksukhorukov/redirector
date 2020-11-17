@@ -13,4 +13,10 @@ RSpec.describe RedirectorService do
 		short_url = service.create[:short_url]
 		expect(short_url).to match(/[a-z0-9]{5}/i)
 	end
+
+	it "successfully transforms short url to actual url" do 
+		short_url = RedirectorService.new({ url: "http://www.google.com" }).create[:short_url]
+		url = RedirectorService.new({short_url: short_url}).redirect[:url]
+		expect(url).to match("http://www.google.com")
+	end
 end
