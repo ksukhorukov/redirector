@@ -30,8 +30,7 @@ class RedirectorService
     record = Url.where(short_url: short_url).first
 
     if record
-      record.counter += 1
-      record.save
+      record.increment!(:counter)
 
       { url: record.url }
     else
